@@ -1,12 +1,12 @@
 from flask import Flask, request
 import paho.mqtt.client as mqtt
 from transformers import pipeline,AutoTokenizer
-import torch
+
 import tensorrt as trt
 import pycuda.driver as cuda
 import pycuda.autoinit
 import numpy as np
-
+import torch
 app = Flask(__name__)
 
 #MQTT setup 
@@ -22,7 +22,7 @@ mqtt_client.connect(mqtt_broker,mqtt_port,60)
 device = 0 if torch.cuda.is_available() else -1
 #load pre-trained NLP model
 TRT_LOGGER = trt.Logger(trt.Logger.WARNING)
-with open('bart-large-mnli.trt', 'rb') as f:
+with open('mobilebert+uncased.trt', 'rb') as f:
     engine_data = f.read()
     runtime = trt.Runtime(TRT_LOGGER)
     engine = runtime.deserialize_cuda_engine(engine_data)
